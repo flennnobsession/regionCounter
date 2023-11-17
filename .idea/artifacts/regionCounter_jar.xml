@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="regionCounter:jar">
+    <output-path>$USER_HOME$/Downloads</output-path>
+    <root id="archive" name="regionCounter.jar">
+      <element id="module-output" name="regionCounter" />
+    </root>
+  </artifact>
+</component>
