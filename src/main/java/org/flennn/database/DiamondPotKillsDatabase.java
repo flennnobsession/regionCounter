@@ -3,7 +3,7 @@ package org.flennn.database;
 import java.sql.*;
 import java.util.UUID;
 
-public class KillsDatabase {
+public class DiamondPotKillsDatabase {
 
     private final Connection connection;
 
@@ -11,11 +11,11 @@ public class KillsDatabase {
         return connection;
     }
 
-    public KillsDatabase(String path) throws SQLException {
+    public DiamondPotKillsDatabase(String path) throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS kills (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS DiamondPotkills (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "player_uuid TEXT NOT NULL," +
                     "kills INTEGER NOT NULL DEFAULT 0," +
@@ -36,7 +36,7 @@ public class KillsDatabase {
     public void addKill(UUID playerUUID, String timestamp) {
         if (killExists(playerUUID)) {
             int currentKills = getKills(playerUUID);
-            try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE kills SET kills = ?, timestamp = ? WHERE player_uuid = ?")) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE DiamondPotkills SET kills = ?, timestamp = ? WHERE player_uuid = ?")) {
                 preparedStatement.setInt(1, currentKills + 1);
                 preparedStatement.setString(2, timestamp);
                 preparedStatement.setString(3, playerUUID.toString());
@@ -45,7 +45,7 @@ public class KillsDatabase {
                 e.printStackTrace();
             }
         } else {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO kills (player_uuid, kills, timestamp) VALUES (?, 1, ?)")) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO DiamondPotkills (player_uuid, kills, timestamp) VALUES (?, 1, ?)")) {
                 preparedStatement.setString(1, playerUUID.toString());
                 preparedStatement.setString(2, timestamp);
                 preparedStatement.executeUpdate();
@@ -56,7 +56,7 @@ public class KillsDatabase {
     }
 
     public boolean killExists(UUID playerUUID) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM kills WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM DiamondPotkills WHERE player_uuid = ?")) {
             preparedStatement.setString(1, playerUUID.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
@@ -67,7 +67,7 @@ public class KillsDatabase {
     }
 
     public int getKills(UUID playerUUID) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT kills FROM kills WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT kills FROM DiamondPotkills WHERE player_uuid = ?")) {
             preparedStatement.setString(1, playerUUID.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

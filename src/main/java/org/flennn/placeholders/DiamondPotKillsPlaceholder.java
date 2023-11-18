@@ -5,17 +5,17 @@ import org.bukkit.OfflinePlayer;
 import org.flennn.RegionCounter;
 import org.jetbrains.annotations.NotNull;
 
-public class KillsPlaceholder extends PlaceholderExpansion {
+public class DiamondPotKillsPlaceholder extends PlaceholderExpansion {
 
     private final RegionCounter plugin;
 
-    public KillsPlaceholder(RegionCounter plugin) {
+    public DiamondPotKillsPlaceholder(RegionCounter plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public String getIdentifier() {
-        return "Pkills";
+        return "diamondpot";
     }
 
     @Override
@@ -30,8 +30,8 @@ public class KillsPlaceholder extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
-        if (params.equals("total")) {
-            return String.valueOf(plugin.getKillsDatabase().getKills(offlinePlayer.getUniqueId()));
+        if (params.equals("kills")) {
+            return String.valueOf(plugin.getDiamondPotKillsDatabase().getKills(offlinePlayer.getUniqueId()));
         } else {
             return "Invalid parameter";
         }

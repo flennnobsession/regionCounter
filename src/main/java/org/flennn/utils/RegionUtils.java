@@ -1,7 +1,8 @@
 package org.flennn.utils;
 
-import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldguard.WorldGuard;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -10,10 +11,12 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import org.bukkit.util.BlockVector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class RegionUtils {
 
@@ -62,6 +65,26 @@ public class RegionUtils {
                 playerY >= min.getBlockY() && playerY <= max.getBlockY() &&
                 playerZ >= min.getBlockZ() && playerZ <= max.getBlockZ();
     }
+
+    public static String getPlayerRegion(Location location, RegionManager regionManager) {
+        double playerX = location.getX();
+        double playerY = location.getY();
+        double playerZ = location.getZ();
+
+        for (ProtectedRegion region : regionManager.getRegions().values()) {
+            BlockVector3 min = region.getMinimumPoint();
+            BlockVector3 max = region.getMaximumPoint();
+
+            if (playerX >= min.getX() && playerX <= max.getX() &&
+                    playerY >= min.getY() && playerY <= max.getY() &&
+                    playerZ >= min.getZ() && playerZ <= max.getZ()) {
+                return region.getId();
+            }
+        }
+
+        return null;
+    }
+
     public static String[] getAllRegionNames() {
         List<String> allRegionNames = new ArrayList<>();
 
