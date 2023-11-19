@@ -67,7 +67,7 @@ public class KillListener implements Listener {
 
         assert regionManager != null;
 
-        String regionName = String.valueOf(getPlayerRegion(killer.getLocation(), regionManager));
+        String regionName = String.valueOf(getPlayerRegion(killer.getLocation()));
 
         getLogger().info("DEBUG: Region name found: " + regionName);
 

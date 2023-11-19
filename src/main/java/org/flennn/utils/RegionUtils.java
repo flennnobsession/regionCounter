@@ -4,6 +4,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
@@ -66,19 +67,23 @@ public class RegionUtils {
                 playerZ >= min.getBlockZ() && playerZ <= max.getBlockZ();
     }
 
-    public static String getPlayerRegion(Location location, RegionManager regionManager) {
+    public static String getPlayerRegion(Location location) {
         double playerX = location.getX();
         double playerY = location.getY();
         double playerZ = location.getZ();
 
-        for (ProtectedRegion region : regionManager.getRegions().values()) {
-            BlockVector3 min = region.getMinimumPoint();
-            BlockVector3 max = region.getMaximumPoint();
+            for (World world : Bukkit.getWorlds()) {
+                RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
 
-            if (playerX >= min.getX() && playerX <= max.getX() &&
-                    playerY >= min.getY() && playerY <= max.getY() &&
-                    playerZ >= min.getZ() && playerZ <= max.getZ()) {
-                return region.getId();
+            for (ProtectedRegion region : regionManager.getRegions().values()) {
+                BlockVector3 min = region.getMinimumPoint();
+                BlockVector3 max = region.getMaximumPoint();
+
+                if (playerX >= min.getX() && playerX <= max.getX() &&
+                        playerY >= min.getY() && playerY <= max.getY() &&
+                        playerZ >= min.getZ() && playerZ <= max.getZ()) {
+                    return region.getId();
+                }
             }
         }
 
