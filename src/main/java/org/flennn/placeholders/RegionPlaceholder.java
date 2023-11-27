@@ -9,6 +9,7 @@ import org.flennn.RegionCounter;
 import org.flennn.utils.RegionUtils;
 import org.jetbrains.annotations.NotNull;
 
+import static org.bukkit.Bukkit.getLogger;
 import static org.flennn.utils.RegionUtils.containsRegion;
 
 public class RegionPlaceholder extends PlaceholderExpansion {
@@ -34,10 +35,6 @@ public class RegionPlaceholder extends PlaceholderExpansion {
     }
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
-
-        String[] allRegionNames = RegionUtils.getAllRegionNames();
-
-        if (containsRegion(allRegionNames, params)) {
             Object[] regionInfo = RegionUtils.getPlayerCountInRegion((Player) offlinePlayer, params);
             if ((int) regionInfo[0] >= 0 && regionInfo[1] != "noregion") {
 
@@ -46,9 +43,6 @@ public class RegionPlaceholder extends PlaceholderExpansion {
             } else {
                 return "Region not found";
             }
-        } else {
-            return "Region not found";
-        }
     }
 
 

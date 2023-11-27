@@ -3,7 +3,7 @@ package org.flennn.database;
 import java.sql.*;
 import java.util.UUID;
 
-public class SMPKillsDatabase {
+public class UHCKillsDatabase {
 
     private final Connection connection;
 
@@ -11,19 +11,20 @@ public class SMPKillsDatabase {
         return connection;
     }
 
-    public SMPKillsDatabase(String path) throws SQLException {
+    public UHCKillsDatabase(String path) throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS smpkills (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS uhckills (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "player_uuid TEXT NOT NULL," +
                     "kills INTEGER NOT NULL DEFAULT 0," +
                     "deaths INTEGER NOT NULL DEFAULT 0," +
                     "timestamp TEXT NOT NULL)");
 
+
             try {
-                statement.execute("ALTER TABLE smpkills ADD COLUMN deaths INTEGER DEFAULT 0;");
+                statement.execute("ALTER TABLE uhckills ADD COLUMN deaths INTEGER DEFAULT 0;");
             } catch (SQLException e) {
                 if (!e.getMessage().contains("duplicate column name")) {
                     throw e;
@@ -32,8 +33,6 @@ public class SMPKillsDatabase {
         }
 
     }
-
-
 
     public void closeConnection() {
         try {
@@ -48,7 +47,7 @@ public class SMPKillsDatabase {
     public void addKill(UUID playerUUID, String timestamp) {
         if (killExists(playerUUID)) {
             int currentKills = getKills(playerUUID);
-            try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE smpkills SET kills = ?, timestamp = ? WHERE player_uuid = ?")) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE uhckills SET kills = ?, timestamp = ? WHERE player_uuid = ?")) {
                 preparedStatement.setInt(1, currentKills + 1);
                 preparedStatement.setString(2, timestamp);
                 preparedStatement.setString(3, playerUUID.toString());
@@ -57,7 +56,7 @@ public class SMPKillsDatabase {
                 e.printStackTrace();
             }
         } else {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO smpkills (player_uuid, kills, deaths, timestamp) VALUES (?, 1, 0, ?)")) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO uhckills (player_uuid, kills, deaths, timestamp) VALUES (?, 1, 0, ?)")) {
                 preparedStatement.setString(1, playerUUID.toString());
                 preparedStatement.setString(2, timestamp);
                 preparedStatement.executeUpdate();
@@ -66,19 +65,31 @@ public class SMPKillsDatabase {
             }
         }
     }
+
     public void addDeath(UUID playerUUID, String timestamp) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO smpkills (player_uuid, kills, deaths, timestamp) VALUES (?, 0, 1, ?)")) {
+        if (killExists(playerUUID)) {
+            int currentDeaths = getDeaths(playerUUID);
+            try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE uhckills SET deaths = ?, timestamp = ? WHERE player_uuid = ?")) {
+                preparedStatement.setInt(1, currentDeaths + 1);
+                preparedStatement.setString(2, timestamp);
+                preparedStatement.setString(3, playerUUID.toString());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO uhckills (player_uuid, kills, deaths, timestamp) VALUES (?, 0, 1, ?)")) {
                 preparedStatement.setString(1, playerUUID.toString());
                 preparedStatement.setString(2, timestamp);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
     }
 
-
     public boolean killExists(UUID playerUUID) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM smpkills WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM uhckills WHERE player_uuid = ?")) {
             preparedStatement.setString(1, playerUUID.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
@@ -89,7 +100,7 @@ public class SMPKillsDatabase {
     }
 
     public int getKills(UUID playerUUID) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT kills FROM smpkills WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT kills FROM uhckills WHERE player_uuid = ?")) {
             preparedStatement.setString(1, playerUUID.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -102,7 +113,7 @@ public class SMPKillsDatabase {
     }
 
     public int getDeaths(UUID playerUUID) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deaths FROM smpkills WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deaths FROM uhckills WHERE player_uuid = ?")) {
             preparedStatement.setString(1, playerUUID.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

@@ -5,17 +5,17 @@ import org.bukkit.OfflinePlayer;
 import org.flennn.RegionCounter;
 import org.jetbrains.annotations.NotNull;
 
-public class SMPKillsPlaceholder extends PlaceholderExpansion {
+public class UHCKillsPlaceholder extends PlaceholderExpansion {
 
     private final RegionCounter plugin;
 
-    public SMPKillsPlaceholder(RegionCounter plugin) {
+    public UHCKillsPlaceholder(RegionCounter plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public String getIdentifier() {
-        return "smp";
+        return "uhc";
     }
 
     @Override
@@ -31,9 +31,9 @@ public class SMPKillsPlaceholder extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (params.equals("kills")) {
-            return String.valueOf(plugin.getSMPKillsDatabase().getKills(offlinePlayer.getUniqueId()));
-        } else if (params.equals("deaths")) {
-            return String.valueOf(plugin.getSMPKillsDatabase().getDeaths(offlinePlayer.getUniqueId()));
+            return String.valueOf(plugin.getUHCKillsDatabase().getKills(offlinePlayer.getUniqueId()));
+        } else if(params.equals("deaths")){
+            return String.valueOf(plugin.getUHCKillsDatabase().getDeaths(offlinePlayer.getUniqueId()));
         } else {
             return "Invalid parameter";
         }

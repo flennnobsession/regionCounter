@@ -32,6 +32,8 @@ public class AxeKillsPlaceholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (params.equals("kills")) {
             return String.valueOf(plugin.getAxeKillsDatabase().getKills(offlinePlayer.getUniqueId()));
+        } else if (params.equals("deaths")){
+            return String.valueOf(plugin.getAxeKillsDatabase().getDeaths(offlinePlayer.getUniqueId()));
         } else {
             return "Invalid parameter";
         }
