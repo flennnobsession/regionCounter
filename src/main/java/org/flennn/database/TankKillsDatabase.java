@@ -22,8 +22,8 @@ public class TankKillsDatabase {
                     "player_uuid TEXT PRIMARY KEY," +
                     "username TEXT NOT NULL," +
                     "kills INTEGER NOT NULL DEFAULT 0," +
-                    "deaths INTEGER NOT NULL DEFAULT 0," +
-                    "timestamp TEXT NOT NULL)");
+                    "deaths INTEGER NOT NULL DEFAULT 0" +
+                    ")");
         }
 
     }
@@ -49,30 +49,28 @@ public class TankKillsDatabase {
         }
     }
 
-    public void addKill(Player player, String timestamp) throws SQLException {
+    public void addKill(Player player) throws SQLException {
         if (!playerExists(player)) {
             addPlayer(player);
         }
 
         int currentKills = getKills(player);
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE tankkills SET kills = ?, timestamp = ? WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE tankkills SET kills = ? WHERE player_uuid = ?")) {
             preparedStatement.setInt(1, currentKills + 1);
-            preparedStatement.setString(2, timestamp);
-            preparedStatement.setString(3, player.getUniqueId().toString());
+            preparedStatement.setString(2, player.getUniqueId().toString());
             preparedStatement.executeUpdate();
         }
     }
 
-    public void addDeath(Player player, String timestamp) throws SQLException {
+    public void addDeath(Player player) throws SQLException {
         if (!playerExists(player)) {
             addPlayer(player);
         }
 
         int currentDeaths = getDeaths(player);
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE tankkills SET deaths = ?, timestamp = ? WHERE player_uuid = ?")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE tankkills SET deaths = ? WHERE player_uuid = ?")) {
             preparedStatement.setInt(1, currentDeaths + 1);
-            preparedStatement.setString(2, timestamp);
-            preparedStatement.setString(3, player.getUniqueId().toString());
+            preparedStatement.setString(2, player.getUniqueId().toString());
             preparedStatement.executeUpdate();
 
         }

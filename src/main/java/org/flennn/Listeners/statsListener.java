@@ -79,28 +79,28 @@ public class statsListener implements Listener {
                 String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
                 if (regionName.equals(smpRegionName) || regionName.equals("smpcenter") || regionName.equals("smpforest")) {
-                    smpKillsDatabase.addKill(killer, timestamp);
+                    smpKillsDatabase.addKill(killer);
                     getLogger().info("Added kill to SMP database.");
                 } else if (regionName.equals(crystalpvpRegionName) || regionName.equals("holedown") || regionName.equals("holetop") || regionName.equals("flat")) {
-                    crystalpvpDatabase.addKill(killer, timestamp);
+                    crystalpvpDatabase.addKill(killer);
                     getLogger().info("Added kill to CrystalPVP database.");
                 } else if (regionName.equals(diamondpotRegionName) || regionName.equals("diamondpotcenter") || regionName.equals("diamondpotcave") || regionName.equals("diamondpotlake")) {
-                    diamondpotDatabase.addKill(killer, timestamp);
+                    diamondpotDatabase.addKill(killer);
                     getLogger().info("Added kill to DiamondPot database.");
                 } else if (regionName.equals(tankRegionName) || regionName.equals("buildingstank") || regionName.equals("stagetank") || regionName.equals("stairstank")) {
-                    tankDatabase.addKill(killer, timestamp);
+                    tankDatabase.addKill(killer);
                     getLogger().info("Added kill to Tank database.");
                 } else if (regionName.equals(netheritepotRegionName) || regionName.equals("netforest") || regionName.equals("netmiddle")) {
-                    netheritepotDatabase.addKill(killer, timestamp);
+                    netheritepotDatabase.addKill(killer);
                     getLogger().info("Added kill to NetheritePot database.");
                 } else if (regionName.equals(axeRegionName)) {
-                    axeDatabase.addKill(killer, timestamp);
+                    axeDatabase.addKill(killer);
                     getLogger().info("Added kill to Axe database.");
                 } else if (regionName.equals(uhcRegionName)) {
-                    uhcdatabase.addKill(killer, timestamp);
+                    uhcdatabase.addKill(killer);
                     getLogger().info("Added kill to UHC database.");
                 } else if (regionName.equals(CartPVPRegionName)) {
-                    cartpvpkillsDatabase.addKill(killer, timestamp);
+                    cartpvpkillsDatabase.addKill(killer);
                     getLogger().info("Added kill to CartPVP database.");
                 }
             } else {
@@ -116,28 +116,28 @@ public class statsListener implements Listener {
             String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
             if (regionName.equals(smpRegionName) || regionName.equals("smpcenter") || regionName.equals("smpforest")) {
-                smpKillsDatabase.addDeath(victim, timestamp);
+                smpKillsDatabase.addDeath(victim);
                 getLogger().info("Added death to SMP database.");
             } else if (regionName.equals(crystalpvpRegionName) || regionName.equals("holedown") || regionName.equals("holetop") || regionName.equals("flat")) {
-                crystalpvpDatabase.addDeath(victim, timestamp);
+                crystalpvpDatabase.addDeath(victim);
                 getLogger().info("Added death to CrystalPVP database.");
             } else if (regionName.equals(diamondpotRegionName) || regionName.equals("diamondpotcenter") || regionName.equals("diamondpotcave") || regionName.equals("diamondpotlake")) {
-                diamondpotDatabase.addDeath(victim, timestamp);
+                diamondpotDatabase.addDeath(victim);
                 getLogger().info("Added death to DiamondPot database.");
             } else if (regionName.equals(tankRegionName) || regionName.equals("buildingstank") || regionName.equals("stagetank") || regionName.equals("stairstank")) {
-                tankDatabase.addDeath(victim, timestamp);
+                tankDatabase.addDeath(victim);
                 getLogger().info("Added death to Tank database.");
             } else if (regionName.equals(netheritepotRegionName) || regionName.equals("netforest") || regionName.equals("netmiddle")) {
-                netheritepotDatabase.addDeath(victim, timestamp);
+                netheritepotDatabase.addDeath(victim);
                 getLogger().info("Added death to NetheritePot database.");
             } else if (regionName.equals(axeRegionName)) {
-                axeDatabase.addDeath(victim, timestamp);
+                axeDatabase.addDeath(victim);
                 getLogger().info("Added death to Axe database.");
             } else if (regionName.equals(uhcRegionName)) {
-                uhcdatabase.addDeath(victim, timestamp);
+                uhcdatabase.addDeath(victim);
                 getLogger().info("Added death to Axe database.");
             } else if (regionName.equals(CartPVPRegionName)) {
-                cartpvpkillsDatabase.addDeath(victim, timestamp);
+                cartpvpkillsDatabase.addDeath(victim);
                 getLogger().info("Added kill to CartPVP database.");
             }
         } else {
