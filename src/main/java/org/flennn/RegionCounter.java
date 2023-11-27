@@ -11,6 +11,8 @@ import org.flennn.cmds.RegionCommand;
 import org.flennn.database.*;
 import org.flennn.placeholders.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public final class RegionCounter extends JavaPlugin implements Listener {
@@ -33,14 +35,20 @@ public final class RegionCounter extends JavaPlugin implements Listener {
 
 
 
-    private SMPKillsDatabase smpkillsDatabase;
-    private DiamondPotKillsDatabase diamondpotkillsDatabase;
-    private NetheritePotKillsDatabase netheritepotkillsDatabase;
-    private CrystalPVPKillsDatabase crystaalpvpkillsDatabase;
-    private AxeKillsDatabase axekillsDatabase;
-    private TankKillsDatabase tankkillsDatabase;
-    private UHCKillsDatabase uhckillsDatabase;
-    private CartPVPKillsDatabase cartpvpkillsDatabase;
+    private static SMPKillsDatabase smpkillsDatabase;
+
+    public static SMPKillsDatabase getSmpkillsDatabase() {
+        return smpkillsDatabase;
+    }
+
+
+    private static DiamondPotKillsDatabase diamondpotkillsDatabase;
+    private static NetheritePotKillsDatabase netheritepotkillsDatabase;
+    private static CrystalPVPKillsDatabase crystaalpvpkillsDatabase;
+    private static AxeKillsDatabase axekillsDatabase;
+    private static TankKillsDatabase tankkillsDatabase;
+    private static UHCKillsDatabase uhckillsDatabase;
+    private static CartPVPKillsDatabase cartpvpkillsDatabase;
 
 
     @Override
@@ -71,24 +79,25 @@ public final class RegionCounter extends JavaPlugin implements Listener {
 
 
         try {
+            File dataFolder = getDataFolder();
+            File databasesFolder = new File(dataFolder, "databases");
 
-
-            // Connect to the database
-            smpkillsDatabase = new SMPKillsDatabase(getDataFolder().getAbsolutePath() + "/smpkills.db");
-            diamondpotkillsDatabase = new DiamondPotKillsDatabase(getDataFolder().getAbsolutePath() + "/diamondpotkills.db");
-            crystaalpvpkillsDatabase = new CrystalPVPKillsDatabase(getDataFolder().getAbsolutePath() + "/crystalpvpkills.db");
-            axekillsDatabase = new AxeKillsDatabase(getDataFolder().getAbsolutePath() + "/axekills.db");
-            tankkillsDatabase = new TankKillsDatabase(getDataFolder().getAbsolutePath() + "/tankkills.db");
-            netheritepotkillsDatabase = new NetheritePotKillsDatabase(getDataFolder().getAbsolutePath() + "/netheritepotkills.db");
-            uhckillsDatabase = new UHCKillsDatabase(getDataFolder().getAbsolutePath() + "/uhckills.db");
-            cartpvpkillsDatabase = new CartPVPKillsDatabase(getDataFolder().getAbsolutePath() + "/cartpvpkills.db");
-
-            if (!getDataFolder().exists()) {
-                getDataFolder().mkdirs();
+            if (!databasesFolder.exists() && !databasesFolder.mkdirs()) {
+                throw new IOException("Failed to create the databases folder");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            getLogger().severe("Failed to connect to the database! " + e.getMessage());
+
+            smpkillsDatabase = new SMPKillsDatabase(new File(databasesFolder, "smpkills.db").getAbsolutePath());
+            diamondpotkillsDatabase = new DiamondPotKillsDatabase(new File(databasesFolder, "diamondpotkills.db").getAbsolutePath());
+            crystaalpvpkillsDatabase = new CrystalPVPKillsDatabase(new File(databasesFolder, "crystalpvpkills.db").getAbsolutePath());
+            axekillsDatabase = new AxeKillsDatabase(new File(databasesFolder, "axekills.db").getAbsolutePath());
+            tankkillsDatabase = new TankKillsDatabase(new File(databasesFolder, "tankkills.db").getAbsolutePath());
+            netheritepotkillsDatabase = new NetheritePotKillsDatabase(new File(databasesFolder, "netheritepotkills.db").getAbsolutePath());
+            uhckillsDatabase = new UHCKillsDatabase(new File(databasesFolder, "uhckills.db").getAbsolutePath());
+            cartpvpkillsDatabase = new CartPVPKillsDatabase(new File(databasesFolder, "cartpvpkills.db").getAbsolutePath());
+
+        } catch (SQLException | IOException ex) {
+            ex.printStackTrace();
+            Bukkit.getConsoleSender().sendMessage("Failed to connect to the database! " + ex.getMessage());
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -143,28 +152,28 @@ public final class RegionCounter extends JavaPlugin implements Listener {
         getLogger().info("RegionCounter is now disabled.");
     }
 
-    public  SMPKillsDatabase getSMPKillsDatabase() {
+    public static SMPKillsDatabase getSMPKillsDatabase() {
         return smpkillsDatabase;
     }
-    public AxeKillsDatabase getAxeKillsDatabase() {
+    public static AxeKillsDatabase getAxeKillsDatabase() {
         return axekillsDatabase;
     }
-    public DiamondPotKillsDatabase getDiamondPotKillsDatabase() {
+    public static DiamondPotKillsDatabase getDiamondPotKillsDatabase() {
         return diamondpotkillsDatabase;
     }
-    public NetheritePotKillsDatabase getNetheritePotKillsDatabase() {
+    public static NetheritePotKillsDatabase getNetheritePotKillsDatabase() {
         return netheritepotkillsDatabase;
     }
-    public CrystalPVPKillsDatabase getKillsCrystalPVPDatabase() {
+    public static CrystalPVPKillsDatabase getCrystalPVPDatabase() {
         return crystaalpvpkillsDatabase;
     }
-    public  TankKillsDatabase getTankKillsDatabase() {
+    public  static TankKillsDatabase getTankKillsDatabase() {
         return tankkillsDatabase;
     }
-    public  UHCKillsDatabase getUHCKillsDatabase() {
+    public  static UHCKillsDatabase getUHCKillsDatabase() {
         return uhckillsDatabase;
     }
-    public  CartPVPKillsDatabase getCartPVPKillsDatabase() {
+    public  static CartPVPKillsDatabase getCartPVPKillsDatabase() {
         return cartpvpkillsDatabase;
     }
 

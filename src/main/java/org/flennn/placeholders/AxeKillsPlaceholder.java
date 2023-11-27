@@ -2,8 +2,11 @@ package org.flennn.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.flennn.RegionCounter;
 import org.jetbrains.annotations.NotNull;
+
+import java.sql.SQLException;
 
 public class AxeKillsPlaceholder extends PlaceholderExpansion {
 
@@ -31,9 +34,17 @@ public class AxeKillsPlaceholder extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (params.equals("kills")) {
-            return String.valueOf(plugin.getAxeKillsDatabase().getKills(offlinePlayer.getUniqueId()));
+            try {
+                return String.valueOf(plugin.getAxeKillsDatabase().getKills((Player) offlinePlayer));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } else if (params.equals("deaths")){
-            return String.valueOf(plugin.getAxeKillsDatabase().getDeaths(offlinePlayer.getUniqueId()));
+            try {
+                return String.valueOf(plugin.getAxeKillsDatabase().getDeaths((Player) offlinePlayer));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             return "Invalid parameter";
         }

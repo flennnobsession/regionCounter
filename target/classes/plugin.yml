@@ -1,0 +1,14 @@
+name: regionCounter
+version: '1.0.1'
+main: org.flennn.RegionCounter
+api-version: '1.19'
+author: flennn
+depend:
+  - PlaceholderAPI
+  - WorldGuard
+
+commands:
+  rc:
+    description: Checks how many players in specific region.
+    usage: /rc
+    permission: rc.use
